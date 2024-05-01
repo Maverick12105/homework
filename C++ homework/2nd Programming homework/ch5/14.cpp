@@ -25,3 +25,66 @@
 	rating of 1 for movie 101,
 	rating of 2 for movie 103.
 	*/
+
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+int main()
+{
+	int ratingReviewer[4][6] = {{3,1,5,2,1,5},{4,2,1,4,2,4},{3,1,2,4,4,1},{5,1,4,2,4,2}};
+	int movieUser[3], ratingUser;
+	int ratingDistance[4] = {0,0,0,0};
+	char repeat = 'y';
+	int closestReviewer[4] = {-1,-1,-1,-1};
+
+	for (int i = 0; i < 3 && repeat == 'y'; ++i)
+	{
+		cout << "which movie? => ";
+		cin >> movieUser[i];          // add input limit
+		cout << "rating? => ";
+		cin >> ratingUser;
+		for (int j = 1; j < 4; ++j) ratingDistance[j] += pow(ratingReviewer[j][movieUser[i] - 100] - ratingUser, 2);
+	}
+
+	int ph = 1;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		if (closestReviewer[0] = sqrt(ratingDistance[i]))
+		{
+			closestReviewer[ph] = i;
+			++ph;
+		}
+		if (closestReviewer[0] < sqrt(ratingDistance[i]))
+		{
+			for (int j = 1; j < 4; ++j)
+				closestReviewer[j] = -1;
+			closestReviewer[0] = i;
+			ph = 1;
+		}
+	}
+
+	cout << "prediction:";
+
+	double ph5;
+	int j;
+	for (int i = 0; i < 6; ++i)
+	{
+		if (i + 100 == movieUser[0]) continue;
+		if (i + 100 == movieUser[1]) continue;
+		if (i + 100 == movieUser[2]) continue;
+		ph5 = 0;
+		cout << endl;
+		cout << "Rating of ";
+		for (j = 0; j < 4; ++j)
+		{
+			if (closestReviewer[j] = -1) break;
+			ph5 += ratingReviewer[closestReviewer[j]][i];
+		}
+		cout << ph5 / j;                // still have bug
+		cout << " for movie 10" << i;
+	}
+
+	return 0;
+}
