@@ -34,40 +34,53 @@ int main()
 {
 	int ratingReviewer[4][6] = {{3,1,5,2,1,5},{4,2,1,4,2,4},{3,1,2,4,4,1},{5,1,4,2,4,2}};
 	int movieUser[3], ratingUser;
-	int ratingDistance[4] = {0,0,0,0};
+	double ratingDistance[4] = {0,0,0,0};
 	char repeat = 'y';
-	int closestReviewer[4] = {-1,-1,-1,-1};
 
-	for (int i = 0; i < 3 && repeat == 'y'; ++i)
+	for (int i = 0; i < 3 && repeat == 'y'; ++i) // add end early
 	{
 		cout << "which movie? => ";
-		cin >> movieUser[i];          // add input limit
+		while (true)
+		{
+			cin >> movieUser[i];
+			if (100 <= movieUser[i] && movieUser[i] <= 105) break;
+			cout << "Invalid input, try again => ";
+		}
 		cout << "rating? => ";
-		cin >> ratingUser;
-		for (int j = 1; j < 4; ++j) ratingDistance[j] += pow(ratingReviewer[j][movieUser[i] - 100] - ratingUser, 2);
+		while (true)
+		{
+			cin >> ratingUser;
+			if (0 <= ratingUser && ratingUser <= 5) break;
+			cout << "Invalid input, try again => ";
+		}
+		
+		for (int j = 0; j < 4; ++j) ratingDistance[j] += pow(ratingReviewer[j][movieUser[i] - 100] - ratingUser, 2);
 	}
 
-	int ph = 1;
+	int closestReviewer[4] = { 0,-1,-1,-1 };
+	int closestReviewerNumber = 1;
+	double closestReviewerDistance = sqrt(ratingDistance[0]);
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 1; i < 4; ++i)
 	{
-		if (closestReviewer[0] = sqrt(ratingDistance[i]))
+		if (closestReviewerDistance == sqrt(ratingDistance[i]))
 		{
-			closestReviewer[ph] = i;
-			++ph;
+			closestReviewer[closestReviewerNumber] = i;
+			++closestReviewerNumber;
 		}
-		if (closestReviewer[0] < sqrt(ratingDistance[i]))
+		if (closestReviewerDistance > sqrt(ratingDistance[i]))
 		{
 			for (int j = 1; j < 4; ++j)
 				closestReviewer[j] = -1;
+			closestReviewerDistance = sqrt(ratingDistance[i]);
 			closestReviewer[0] = i;
-			ph = 1;
+			closestReviewerNumber = 1;
 		}
 	}
 
 	cout << "prediction:";
 
-	double ph5;
+	double ph5; //change this
 	int j;
 	for (int i = 0; i < 6; ++i)
 	{
@@ -77,14 +90,16 @@ int main()
 		ph5 = 0;
 		cout << endl;
 		cout << "Rating of ";
-		for (j = 0; j < 4; ++j)
+		for (j = 0; j < closestReviewerNumber; ++j)
 		{
-			if (closestReviewer[j] = -1) break;
+			if (closestReviewer[j] == -1) break;
 			ph5 += ratingReviewer[closestReviewer[j]][i];
 		}
-		cout << ph5 / j;                // still have bug
+		cout << ph5 / j;
 		cout << " for movie 10" << i;
 	}
+
+	
 
 	return 0;
 }
